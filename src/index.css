@@ -1,0 +1,276 @@
+@tailwind base;
+
+@layer base {
+  html {
+    @apply text-neutral-800;
+  }
+  html.dark {
+    @apply text-neutral-50;
+    @apply bg-neutral-800;
+  }
+}
+
+@tailwind components;
+@tailwind utilities;
+
+/* 
+Google Fonts 
+.cutive-mono-regular {
+	font-family: "Cutive Mono", monospace;
+	font-weight: 400;
+}
+
+.anta-regular {
+  font-family: "Anta", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+*::-webkit-scrollbar,
+.scroll::-webkit-scrollbar {
+  width: 0.6vw !important;
+}
+
+*::-webkit-scrollbar-thumb,
+.scroll::-webkit-scrollbar-thumb {
+  background-color: #ffffffdc !important;
+  border: 1px solid #000000;
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover,
+.scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #000000f1 !important;
+  border: 1px solid #ffffffdc;
+}
+
+*::-webkit-scrollbar-track,
+.scroll::-webkit-scrollbar-track {
+  background-color: #393939 !important;
+}
+*::-webkit-scrollbar-track:hover
+.scroll::-webkit-scrollbar-track:hover {
+  background-color: #393939 !important;
+}
+
+/* :root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+  
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+} */
+
+body {
+  font-family: "Cutive Mono", monospace;
+  color-scheme: light dark;
+  /* font-weight: 800; */
+  /* font-family: "Anta", sans-serif; */
+  font-style: normal;
+  position: relative;
+  overflow-x: hidden !important;
+  /*
+overflow-x: hidden;
+background-size: cover;
+*/
+background: linear-gradient(-45deg, #000000a9, #000000a9), url("../assets/popcorn.jpg");
+background-attachment: fixed;
+background-position: top;
+background-repeat: repeat;
+transition: all 0.4s ease-in-out;
+color: white;
+min-width: 320px;
+min-height: 100vh;
+}
+
+input, textarea {
+	color: #000000 !important;
+  background-color: #fffffff5;
+}
+
+input:focus, input:active, textarea:focus, textarea:active {
+  color: #e3e3e3 !important;
+  background-color: #0000008b;
+  outline: 1px solid #fffffff5;
+  border: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+/* a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+} */
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+/* Film Card Tooltip */
+
+.data-tooltip::before,
+.data-tooltip::after {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: all 0.2s ease;
+}
+
+.data-tooltip::before {
+  content: attr(data-tooltip-content);
+  width: fit-content;
+  font-size: small;
+  font-weight: 600;
+  background-color: #000000cd;
+  padding: 3px 10px;
+  border: 0.3px solid #d8d8d85b;
+  border-radius: 1rem;
+  bottom: calc(100%);
+  /* top: calc(0% - 15px); */
+}
+
+.data-tooltip::after {
+  content: "";
+  /* border-top: 5px solid #191919;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent; */
+  bottom: calc(100% + 1px);
+}
+
+.data-tooltip:hover::before,
+.data-tooltip:hover::after {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* End Film Card Tooltip */
+
+
+/* Pagination Start */
+.pagination {
+  /* border: solid 2px; */
+  /* font-size: x-small; */
+  /* margin: 0.8 auto; */
+  list-style: none;
+  height: 31.5px;
+  width: 100%;
+  /* width: 31.5px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.8rem;
+}
+
+.pagination-active {
+  background-color: #000e3fa7;
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.page-item {
+  list-style: none;
+  padding: 2px 12px;
+  height: 40.5px;
+  width: 40.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2px;
+}
+/* End Pagination */
+
+#add-popup {
+	/* 
+	display: none; 
+	z-index: -10;
+	*/
+	transform: scale3d(0.98,0.98,0.98); 
+	transition: transform 0.2s ease-in-out !important;
+	align-items: center; 
+	visibility: hidden;
+	justify-content: center;
+}
+
+#add-popup.active {
+	/*z-index: 50;*/
+	display: flex;
+	transform: scale3d(1,1,1);
+	transition: transform 0.2s ease-in-out !important;
+	visibility: visible;
+}
+
+.add-popup-body {
+	background: linear-gradient(-45deg, #00000081, #00000081), url("../assets/film-projector.png");
+	background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  /* a:hover {
+    color: #747bff;
+  } */
+  /* button {
+    background-color: #f9f9f9;
+  } */
+}
+
+@media only screen and (max-width: 600px) {
+  .pagination {
+    font-size: xx-small;
+    width: 100%;
+  }
+
+  .page-item {
+    list-style: none;
+    padding: 2px 12px;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2px;
+  }
+}
+
+/* @media only screen and (max-height: 600px) {
+
+} */
