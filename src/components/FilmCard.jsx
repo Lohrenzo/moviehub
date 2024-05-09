@@ -45,7 +45,7 @@ const FilmCard = ({
 
   useEffect(() => {
     const fetchMovieImage = async () => {
-      const apiKey = "15d2ea6d0dc1d476efbca3eba2b9bbfb";
+      const apiKey = import.meta.env.VITE_THEMOVIEDB_API_KEY;
       const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(
         title
       )}`;
