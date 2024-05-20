@@ -5,9 +5,6 @@ import { xmlToJson, textToJson } from "../utils/formatter";
 // Axios
 import axios from "../apiRequest/axios";
 
-// URLs
-// const Films_URL = "films";
-
 // Store for managing update film popup state
 export const useUpdatePopUpStore = create((set) => ({
   updatePopUp: false,
