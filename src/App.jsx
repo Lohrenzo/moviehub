@@ -89,7 +89,6 @@ function App() {
 
   useEffect(() => {
     searchFilms(searchStr);
-    console.log(import.meta.env.VITE_API_URL);
   }, [searchStr]);
 
   useEffect(() => {
