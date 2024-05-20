@@ -15,8 +15,8 @@ const FilmCard = ({
   title,
   year,
   director,
-  stars,
   review,
+  stars,
   added,
   lastModified,
 }) => {
@@ -99,13 +99,13 @@ const FilmCard = ({
                   id,
                   imgSrc,
                   rating,
-                  title,
-                  year,
-                  director,
-                  stars,
-                  review,
-                  added,
-                  lastModified,
+                  // title,
+                  // year,
+                  // director,
+                  // stars,
+                  // review,
+                  // added,
+                  // lastModified,
                 },
               }
             );
@@ -124,13 +124,6 @@ const FilmCard = ({
                   id,
                   imgSrc,
                   rating,
-                  title,
-                  year,
-                  director,
-                  stars,
-                  review,
-                  added,
-                  lastModified,
                 },
               }
             );
@@ -173,13 +166,6 @@ const FilmCard = ({
                     id,
                     imgSrc,
                     rating,
-                    title,
-                    year,
-                    director,
-                    stars,
-                    review,
-                    added,
-                    lastModified,
                   },
                 }
               );

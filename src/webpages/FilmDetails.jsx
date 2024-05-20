@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 //Icons
 import { FaTrashCan, FaPenToSquare, FaStar } from "react-icons/fa6";
@@ -10,6 +10,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 // Axios
 import axios from "../apiRequest/axios";
 
+import { xmlToJsonObject, textToJsonObject } from "../utils/formatter";
+
 // Zustand
 import {
   useFeedbackStore,
@@ -18,30 +20,63 @@ import {
 } from "../store/store";
 
 // URLs
-const Films_URL = "films";
+const Film_URL = "/film";
 
 import { humanizeDate } from "../utils/formatter";
 
 const FilmDetails = () => {
   const location = useLocation();
-  const film = location.state;
+  const [film, setFilm] = useState({});
+  const id = location.state.id;
   const nav = useNavigate();
   const [optionPopUp, setOptionPopUp] = useState(false);
   const { fetchFilms, acceptHeader, deleteButtonClick } = useFilmsStore();
   const { updatePopUp, openUpdatePopup, closeUpdatePopup } =
     useUpdatePopUpStore();
   const { openFeedbackPopup } = useFeedbackStore();
+  const [date, setDate] = useState(null);
 
-  const removeSpacesAndSlashes = (str) => str.replace(/[\s/]/g, "-");
+  // const removeSpacesAndSlashes = (str) => str.replace(/[\s/]/g, "-");
 
-  const [updatedFilmJson, setUpdatedFilmJson] = useState({
-    id: film.id,
-    title: film.title,
-    year: film.year,
-    stars: film.stars,
-    director: film.director,
-    review: film.review,
-  });
+  const fetchFilmById = async () => {
+    const response = await axios.get(`${Film_URL}?id=${id}`);
+
+    let responseData = response?.data || {};
+
+    // if (acceptHeader === "application/xml") {
+    //   responseData = xmlToJsonObject(responseData);
+    // }
+
+    // if (acceptHeader === "text/plain") {
+    //   responseData = textToJsonObject(responseData);
+    // }
+
+    setFilm({ ...location.state, ...responseData });
+  };
+
+  useEffect(() => {
+    fetchFilmById();
+  }, [id, acceptHeader]);
+
+  useEffect(() => {
+    setDate(film.lastModified);
+  }, [film.lastModified]);
+
+  useEffect(() => {
+    console.log("Fetched film: ", film);
+    console.log("Date: ", film.lastModified);
+    setUpdatedFilmJson({
+      id: film.id,
+      title: film.title,
+      year: film.year,
+      stars: film.stars,
+      director: film.director,
+      review: film.review,
+    });
+    console.log("Updated film: ", updatedFilmJson);
+  }, [film]);
+
+  const [updatedFilmJson, setUpdatedFilmJson] = useState({});
 
   function handleTitleChange(e) {
     setUpdatedFilmJson({
@@ -80,25 +115,12 @@ const FilmDetails = () => {
 
   const editFilm = async () => {
     try {
-      await axios.put(Films_URL, updatedFilmJson, {
+      await axios.put("/", updatedFilmJson, {
         headers: { Accept: acceptHeader },
       });
       console.log(`${updatedFilmJson.title} updated!`);
       fetchFilms();
-      nav(
-        `/${removeSpacesAndSlashes(updatedFilmJson.title)
-          .substring(0, 30)
-          .toLowerCase()}`,
-        {
-          state: {
-            ...updatedFilmJson,
-            imgSrc: film.imgSrc,
-            rating: film.rating,
-            added: film.added,
-            lastModified: film.lastModified,
-          },
-        }
-      );
+      nav("/");
 
       openFeedbackPopup(
         `${updatedFilmJson.title} has been updated!`,
@@ -124,33 +146,41 @@ const FilmDetails = () => {
         <div className=" col-span-2">
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="font-bold sm:text-6xl text-xl">{film.title}</h2>
+              <h2 className="font-bold lg:text-5xl md:text-4xl sm:text-3xl text-xl">
+                {film.title}
+              </h2>
               <p className="mb-2 text-gray-400">{film.year}</p>
             </div>
-            <p className="flex flex-row sm:gap-4 gap-2 justify-between items-center sm:text-2xl text-xl">
+            <div className="flex flex-row sm:gap-4 gap-2 justify-between items-center sm:text-2xl text-xl">
               <FaStar className=" text-[yellow]" />{" "}
               <p>
                 {Math.floor(film.rating)}
                 <span className="text-white/65 sm:text-xl text-base">/10</span>
               </p>{" "}
-            </p>
+            </div>
           </div>
           <div className=" overflow-y-hidden max-h-[60vh] sm:text-base text-sm">
             <p className="overflow-y-auto text-justify tracking-wider leading-relaxed mb-4 max-h-[30vh]">
               {film.review}
             </p>
-            <p className="mb-2 pt-3 pb-4 border-b">
+            <p className="mb-2 pt-2 pb-2 border-b">
               <span className="text-gray-300">Director:</span> {film.director}
             </p>
-            <p className="mb-2 pt-3 pb-4 border-b">
+            <p className="mb-2 pt-2 pb-2 border-b">
               <span className="text-gray-300">Stars:</span> {film.stars}
             </p>
-            <p className="mb-2 pt-3 pb-4 border-b text-gray-400">
-              <span>
-                {film.added !== film.lastModified ? "Updated " : "Added "}
-              </span>
-              {humanizeDate(film.lastModified, acceptHeader)}
-            </p>
+            {/* {date ? (
+              <p className="mb-2 pt-2 pb-2 border-b text-gray-400">
+                <span>
+                  {film.added !== film.lastModified ? "Updated " : "Added "}
+                </span>
+                {humanizeDate(film.lastModified, acceptHeader)}
+              </p>
+            ) : (
+              <p className="mb-2 pt-2 pb-2 border-b text-gray-400">
+                Loading...
+              </p>
+            )} */}
           </div>
         </div>
       </div>
@@ -181,7 +211,7 @@ const FilmDetails = () => {
       )}
 
       <div
-        className={`fixed top-0 left-0 right-0 h-[100vh] py-4 px-20 ${
+        className={`fixed top-0 left-0 right-0 h-[100vh] py-4 sm:px-20 ${
           updatePopUp ? "visible" : "invisible"
         } flex flex-col gap-8 items-center justify-center bg-black/50 backdrop-blur-md z-40`}
       >

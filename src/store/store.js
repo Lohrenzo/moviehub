@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { xmlToJson, textToJson } from "../utils/formatter";
+import { xmlToJsonArray, textToJsonArray } from "../utils/formatter";
 
 // Axios
 import axios from "../apiRequest/axios";
@@ -28,11 +28,11 @@ export const useFilmsStore = create((set) => ({
       let responseData = response?.data || [];
 
       if (acceptHeader === "application/xml") {
-        responseData = xmlToJson(responseData);
+        responseData = xmlToJsonArray(responseData);
       }
 
       if (acceptHeader === "text/plain") {
-        responseData = textToJson(responseData);
+        responseData = textToJsonArray(responseData);
       }
 
       set({ films: responseData });

@@ -6,7 +6,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 // Axios
 import axios from "./apiRequest/axios";
 
-import { xmlToJson, textToJson } from "./utils/formatter";
+import { xmlToJsonArray, textToJsonArray } from "./utils/formatter";
 
 //Components
 import Navbar from "./components/Navbar";
@@ -20,9 +20,6 @@ import { IoClose } from "react-icons/io5";
 
 // Zustand
 import { useFeedbackStore, useFilmsStore } from "./store/store";
-
-// URLs
-const Films_URL = "films";
 
 function App() {
   const nav = useNavigate();
@@ -70,11 +67,11 @@ function App() {
         let responseData = response?.data || [];
 
         if (acceptHeader === "application/xml") {
-          responseData = xmlToJson(responseData);
+          responseData = xmlToJsonArray(responseData);
         }
 
         if (acceptHeader === "text/plain") {
-          responseData = textToJson(responseData);
+          responseData = textToJsonArray(responseData);
         }
 
         setFilms(responseData);
@@ -106,6 +103,11 @@ function App() {
     });
     mount();
   }, [acceptHeader]);
+
+  // Hide console logs
+  useEffect(() => {
+    console.log = function () {};
+  }, []);
 
   return (
     <main className="no-select">

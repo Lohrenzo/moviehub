@@ -1,4 +1,4 @@
-export function xmlToJson(xmlData) {
+export function xmlToJsonArray(xmlData) {
   const xmlDocoment = new DOMParser().parseFromString(
     xmlData,
     "application/xml"
@@ -34,7 +34,38 @@ export function xmlToJson(xmlData) {
   return filmsArray;
 }
 
-export function textToJson(textData) {
+export function xmlToJsonObject(xmlData) {
+  const xmlDocoment = new DOMParser().parseFromString(
+    xmlData,
+    "application/xml"
+  );
+  const film = xmlDocoment.querySelector("film");
+
+  const id = film.querySelector("id").textContent;
+  const title = film.querySelector("title").textContent;
+  const year = film.querySelector("year").textContent;
+  const stars = film.querySelector("stars").textContent;
+  const director = film.querySelector("director").textContent;
+  const review = film.querySelector("review").textContent;
+  const lastModified = film.querySelector("lastModified").textContent;
+  const added = film.querySelector("added").textContent;
+
+  const filmJson = {
+    id: id,
+    title: title,
+    year: year,
+    stars: stars,
+    director: director,
+    review: review,
+    lastModified: lastModified,
+    added: added,
+  };
+
+  console.log("XML TO JSON OBJECT: ", filmJson);
+  return filmJson;
+}
+
+export function textToJsonArray(textData) {
   const filmsArray = [];
 
   // Split the text response by '#' to get an array of film strings
@@ -78,6 +109,21 @@ export function textToJson(textData) {
 
   console.log("Text TO JSON: ", filmsArray);
   return filmsArray;
+}
+
+export function textToJsonObject(text) {
+  const lines = text.split("**\n");
+  const obj = {};
+
+  lines.forEach((line) => {
+    const [key, value] = line.split("= ");
+    if (key && value) {
+      obj[key.trim()] = value.trim();
+    }
+  });
+
+  console.log("Text TO JSON OBJECT: ", obj);
+  return obj;
 }
 
 export function humanizeDate(dateString, format) {
